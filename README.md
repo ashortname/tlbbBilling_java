@@ -1,4 +1,4 @@
-# tlbbBilling  
+# billing_java
 这是一个用 java 编写的验证程序  
 
 # 参考了[liuguang](https://github.com/liuguangw/billing_go)
@@ -12,8 +12,8 @@
 # 配置文件  
   -  config.json  
 # 如何运行  
-  -  [点此下载或自行编译jar包](https://github.com/ashortname/tlbbBilling/releases)：  
+  -  [点此下载或自行编译jar包](https://github.com/ashortname/billing_java/releases)：  
 ```bash
 # 进入jar包所在目录  
-java -jar tlbbBilling.jar
+java -jar *.jar
 ```
