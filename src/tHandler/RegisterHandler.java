@@ -5,7 +5,10 @@ import com.sun.corba.se.impl.ior.ByteBuffer;
 import dataBase.dbService;
 import tModel.billingData;
 import tutil.tTool;
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.UserRegisterReq)
 public class RegisterHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {
@@ -54,9 +57,9 @@ public class RegisterHandler extends Handler {
 
         byte regResult = dbService.GetRegisterResult(connection, username, pass, spass, email);
         if(regResult != 1)
-            tTool.mLog("user [" + username + "] try to register failed");
+            tTool.mLog("新用户 [" + username + "] 注册失败！");
         else
-            tTool.mLog("user [" + username + "] try to register from " + ip);
+            tTool.mLog("新用户 [" + username + "] 注册成功！注册IP : " + ip);
         byteBuffer.append(usernameLength);
         for(byte bb : busername)
             byteBuffer.append(bb);

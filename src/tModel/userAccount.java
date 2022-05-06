@@ -18,6 +18,11 @@ public class userAccount {
         DbError
     }
 
+    public userAccount()
+    {
+        Name = "";
+    }
+
     public int getId() {
         return Id;
     }

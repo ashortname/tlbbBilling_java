@@ -2,7 +2,10 @@ package tHandler;
 
 import com.mysql.jdbc.MySQLConnection;
 import tModel.billingData;
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.ConnectReq)
 public class ConnectHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {

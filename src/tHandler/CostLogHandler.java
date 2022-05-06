@@ -4,7 +4,10 @@ import com.mysql.jdbc.MySQLConnection;
 import com.sun.corba.se.impl.ior.ByteBuffer;
 import tModel.billingData;
 import tutil.tTool;
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.CostLogReq)
 public class CostLogHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {

@@ -5,7 +5,10 @@ import com.sun.corba.se.impl.ior.ByteBuffer;
 import dataBase.dbService;
 import tModel.billingData;
 import tutil.tTool;
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.LogOutReq)
 public class LogoutHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {
@@ -25,9 +28,9 @@ public class LogoutHandler extends Handler {
         boolean status = dbService.UpdateOnlineStatus(connection, username, false);
         if(!status)
         {
-            tTool.mLog("!!! error set " + username + " to offline failed!");
+            tTool.mLog("!!! error 设置用户 " + username + " 离线失败！");
         }else{
-            tTool.mLog("user [" + username + "] logout game");
+            tTool.mLog("用户 [" + username + "] 离开游戏");
         }
         byteBuffer.append(userNameLength);
         for(byte bb : busername)

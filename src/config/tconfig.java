@@ -26,13 +26,13 @@ public class tconfig {
     public static void loadConfig()
             throws IOException
     {
-        //初始化默认值
+        //1初始化默认值
         ip = "127.0.0.1";
         port = 9870;
         db_host = "127.0.0.1";
         db_port = 3306;
         db_user = "root";
-        db_password = "maomao";
+        db_password = "root";
         db_name = "web";
         allow_old_password = false;
         allow_ips = new ArrayList<>();
@@ -41,6 +41,11 @@ public class tconfig {
         isLog = false;
         allow_point = true;
 
+
+        //2再从配置文件获取
+        /***
+         * 工具类
+         */
         class tempConfig{
             public  String ip;
             public  int port;
@@ -56,9 +61,7 @@ public class tconfig {
             public  boolean isLog;
             public boolean allow_point;
         }
-
-        //再从配置文件获取
-        String path = tTool.getLocatePath() + "\\config.json";
+        String path = tTool.getLocatePath() + "/config.json";
         JSONReader reader = new JSONReader(new FileReader(path));
         tempConfig tt = reader.readObject(tempConfig.class);
 
@@ -76,5 +79,37 @@ public class tconfig {
         tconfig.allow_ips = tt.allow_ips;
         tconfig.isLog = tt.isLog;
         tconfig.allow_point = tt.allow_point;
+    }
+
+    /***
+     * 检查配置文件
+     * @throws IOException
+     */
+    public static void CheckConfig()
+            throws IOException
+    {
+        String path = tTool.getLocatePath() + "/config.json";
+        File configFile = new File(path);
+        if(!configFile.exists())
+        {
+            PrintWriter writer = new PrintWriter(new FileWriter(configFile));
+            String config = "{\n" +
+                    "  \"ip\": \"127.0.0.1\",\n" +
+                    "  \"port\": 9870,\n" +
+                    "  \"db_host\": \"127.0.0.1\",\n" +
+                    "  \"db_port\": 3306,\n" +
+                    "  \"db_user\": \"root\",\n" +
+                    "  \"db_password\": \"root\",\n" +
+                    "  \"db_name\": \"web\",\n" +
+                    "  \"allow_old_password\": false,\n" +
+                    "  \"auto_reg\": true,\n" +
+                    "  \"allow_ips\": [],\n" +
+                    "  \"transfer_number\": 1000,\n" +
+                    "  \"isLog\": false,\n" +
+                    "  \"allow_point\": true\n" +
+                    "}";
+            writer.print(config);
+            writer.close();
+        }
     }
 }

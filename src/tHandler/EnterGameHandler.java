@@ -5,7 +5,10 @@ import com.sun.corba.se.impl.ior.ByteBuffer;
 import dataBase.dbService;
 import tModel.billingData;
 import tutil.tTool;
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.EnterGameReq)
 public class EnterGameHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {
@@ -31,9 +34,9 @@ public class EnterGameHandler extends Handler {
         boolean status = dbService.UpdateOnlineStatus(connection, username, true);
         if(!status)
         {
-            tTool.mLog("!!! error set " + username + " to online failed!");
+            tTool.mLog("!!! error 设置用户 " + username + " 在线失败！");
         }else{
-            tTool.mLog("user [" + username + "] " + charName + " entered game.");
+            tTool.mLog("用户 [" + username + "] 角色 " + charName + " 进入游戏");
         }
         byteBuffer.append(userNameLength);
         for(byte bb : busername)

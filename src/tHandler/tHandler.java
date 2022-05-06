@@ -9,8 +9,11 @@ import java.util.Map;
 import com.mysql.jdbc.MySQLConnection;
 import config.tconfig;
 import tModel.billingData;
+import tutil.OpCodes;
 import tutil.tTool;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.NONE)
 public class tHandler {
     private static Map<String, Object> handlers = null;
 
@@ -26,7 +29,11 @@ public class tHandler {
             tTool.mLog("未知类型的操作请求：" + opt);
             return false;
         }
-        //tTool.mLog("收到请求：" + opt);
+        if(tTool.DEBUG) {
+            System.out.println("\n收到请求 Type：" + billingData.BillingOpt.get(opt));
+            System.out.println("收到请求 String：" + new String(request.getOpData()));
+            System.out.println("------DEBUG DATA------");
+        }
         try{
             Handler handler = (Handler)handlers.get(opt);
             billingData response = handler.getResponse(request, connection);
@@ -73,6 +80,7 @@ public class tHandler {
         handlers.put(logoH.getType(), logoH);
         handlers.put(pinH.getType(), pinH);
         handlers.put(regH.getType(), regH);
+        //是否开启点数兑换功能
         if(tconfig.allow_point)
         {
             handlers.put(convH.getType(), convH);

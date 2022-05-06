@@ -1,13 +1,17 @@
 package tHandler;
 
 import com.mysql.jdbc.MySQLConnection;
+import dataBase.dbOpenHelper;
 import tModel.billingData;
 import tutil.tTool;
 
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.CloseReq)
 public class CloseHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {
@@ -15,26 +19,28 @@ public class CloseHandler extends Handler {
         response.PrePareResponse(bData);
         response.setOpData(new byte[]{0, 0});
         try{
-            Iterator it = tTool.selector.selectedKeys().iterator();
-            while(it.hasNext())
+            Iterator it = tTool.getKeys();
+            if(it != null)
             {
-                SelectionKey key = (SelectionKey) it.next();
-                SocketChannel sc = (SocketChannel)key.channel();
-                try{
-                    sc.close();
-                }catch (Exception ex)
+                while(it.hasNext())
                 {
-                    continue;
+                    SelectionKey key = (SelectionKey) it.next();
+                    SocketChannel sc = (SocketChannel)key.channel();
+                    try{
+                        sc.close();
+                    }catch (Exception ex)
+                    {
+                        continue;
+                    }
+                    it.remove();
                 }
-                it.remove();
             }
-            tTool.server.close();
-            tTool.selector.close();
-            connection.close();
         }catch (Exception ex)
         {
 
         }
+        tTool.closeSever();
+        dbOpenHelper.closeAll(connection);
         return response;
     }
 

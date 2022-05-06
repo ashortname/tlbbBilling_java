@@ -2,7 +2,10 @@ package tHandler;
 
 import com.mysql.jdbc.MySQLConnection;
 import tModel.billingData;
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.PingNotify)
 public class PingHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {

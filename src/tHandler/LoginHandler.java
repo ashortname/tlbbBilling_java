@@ -7,7 +7,10 @@ import dataBase.dbService;
 import tModel.billingData;
 import tutil.tTool;
 
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.LoginReq)
 public class LoginHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {
@@ -42,7 +45,7 @@ public class LoginHandler extends Handler {
         byte loginResult = dbService.GetLoginResult(connection, username, password);
         if((!tconfig.auto_reg) && (loginResult == 9))
             loginResult = 3;
-        tTool.mLog(String.format("user [%s] try to login from %s with code %d", username, ip, loginResult));
+        tTool.mLog(String.format("用户 [%s] 登录 (IP: %s) 状态码： %d", username, ip, loginResult));
         //构造回传数据
         byteBuffer.append(usernameLength);
         for(byte bb : busername)

@@ -1,9 +1,12 @@
 package tModel;
 
 import com.sun.corba.se.impl.ior.ByteBuffer;
+import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class billingData {
     /***
@@ -17,6 +20,21 @@ public class billingData {
         //数据包格式错误
         BillingDataError
     }
+
+    public static Map<String, String> BillingOpt = new HashMap<String, String>(){{
+        put("0", "关闭");
+        put("A0", "连接");
+        put("C5", "消费记录");
+        put("A3", "进入游戏");
+        put("A6", "Keep");
+        put("A9", "Kick");
+        put("A2", "登录");
+        put("A4", "登出");
+        put("A1", "Ping");
+        put("E2", "查询点数");
+        put("F1", "注册");
+        put("E1", "查询点数");
+    }};
 
     private byte OpType;
     private byte[] MsgID;
@@ -78,7 +96,6 @@ public class billingData {
      * @throws IOException
      */
     public static billingReadResult ReadBillingData(byte[] binaryData)
-            throws IOException
     {
         billingData bData = new billingData();
         int packLength = 0;

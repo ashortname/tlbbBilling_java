@@ -7,7 +7,10 @@ import tModel.QueryResult;
 import tModel.billingData;
 import tModel.userAccount;
 import tutil.tTool;
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.QueryPointReq)
 public class QueryPointHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {
@@ -40,14 +43,14 @@ public class QueryPointHandler extends Handler {
         String username = new String(busername);
         boolean status = dbService.UpdateOnlineStatus(connection, username, true);
         if(!status)
-            tTool.mLog("set user [" + username + "] to online failed");
+            tTool.mLog("设置用户 [" + username + "] 在线失败！");
         QueryResult qs = dbService.GetAccountByUsername(connection, username);
         int accPoint = 0;
         if(qs.code == userAccount.QueryCode.UserFound)
         {
             accPoint = (qs.acc.getPoint() + 1) * 1000;
         }
-        tTool.mLog(String.format("user [%s] %s query point %d at %s",
+        tTool.mLog(String.format("用户 [%s] 角色 【%s】 查询点数 %d (IP : %s)",
                 username, new String(bcharName), qs.acc.getPoint(), new String(bIp)));
 
         byteBuffer.append(usernameLength);

@@ -22,6 +22,7 @@ public class dbOpenHelper {
             url += "&allowOldPasswords=true";
         try {
             Class.forName(driver);//获取MYSQL驱动
+            DriverManager.setLoginTimeout(3);//3s超时
             conn =  DriverManager.getConnection(url, tconfig.db_user, tconfig.db_password);//获取连接
         } catch (Exception ex)
         {

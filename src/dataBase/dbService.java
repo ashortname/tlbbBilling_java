@@ -86,24 +86,22 @@ public class dbService {
                 ps = conn.prepareStatement(sql);
                 ps.setString(1, username);
                 rs = ps.executeQuery();
-                if(rs.wasNull())
+                while (rs.next())
+                {
+                    account.setId(rs.getInt(1));
+                    account.setName(rs.getString(2));
+                    account.setPassWord(rs.getString(3));
+                    account.setQuestion(rs.getString(4));
+                    account.setAnswer(rs.getString(5));
+                    account.setEmail(rs.getString(6));
+                    account.setQq(rs.getString(7));
+                    account.setPoint(rs.getInt(8));
+                    account.setIsOnline(rs.getByte(9));
+                    account.setIsLock(rs.getByte(10));
+                }
+                if(account.getName().equals(""))
                 {
                     return new QueryResult(account, userAccount.QueryCode.UserNotFound);
-                }
-                else {
-                    while (rs.next())
-                    {
-                        account.setId(rs.getInt(1));
-                        account.setName(rs.getString(2));
-                        account.setPassWord(rs.getString(3));
-                        account.setQuestion(rs.getString(4));
-                        account.setAnswer(rs.getString(5));
-                        account.setEmail(rs.getString(6));
-                        account.setQq(rs.getString(7));
-                        account.setPoint(rs.getInt(8));
-                        account.setIsOnline(rs.getByte(9));
-                        account.setIsLock(rs.getByte(10));
-                    }
                 }
             }
         }catch (Exception ex)

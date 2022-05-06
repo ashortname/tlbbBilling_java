@@ -8,7 +8,10 @@ import tModel.QueryResult;
 import tModel.billingData;
 import tModel.userAccount;
 import tutil.tTool;
+import tutil.OpCodes;
+import net.PacketOpCodes;
 
+@OpCodes(PacketOpCodes.ConvertPointReq)
 public class ConvertPointHandler extends Handler {
     @Override
     public billingData getResponse(billingData bData, MySQLConnection connection) {
@@ -84,7 +87,7 @@ public class ConvertPointHandler extends Handler {
         {
             tTool.mLog("!!! error 点数兑换出错！");
         }else{
-            tTool.mLog(String.format("user [%s] %s (ip: %s) point total %d, need point %d : %d - %d = %d",
+            tTool.mLog(String.format("用户账号 [%s] 角色 【%s】 (ip: %s) 拥有点数 %d, 兑换了：%d  剩余：%d - %d = %d",
                     username, new String(bcharName), new String(bIp),
                     userPoint, needPoint, userPoint, realPoint, userPoint - realPoint));
         }

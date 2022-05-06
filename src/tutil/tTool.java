@@ -7,12 +7,15 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 
 public class tTool {
-    public static ServerSocketChannel server = null;
-    public static Selector selector = null;
+    private static ServerSocketChannel server = null;
+    private static Selector selector = null;
+    public static Boolean DEBUG = false;
 
     /**
      * 构造函数
@@ -21,6 +24,45 @@ public class tTool {
 
     }
 
+    /***
+     * 设置全局变量
+     * @param sev
+     * @param sel
+     */
+    public static void setServerAndSelector(ServerSocketChannel sev, Selector sel)
+    {
+        server = sev;
+        selector = sel;
+    }
+
+    /***
+     * 关闭server
+     */
+    public static void closeSever()
+    {
+        try{
+            if(server != null)
+                if(server.isOpen())
+                    server.close();
+            if(selector != null)
+                if(selector.isOpen())
+                    selector.close();
+        }catch (Exception ex)
+        {
+
+        }
+    }
+
+    /***
+     * 获取selectorkeys
+     */
+    public static Iterator getKeys()
+    {
+        if(selector !=null )
+            if(selector.isOpen())
+                return selector.selectedKeys().iterator();
+        return null;
+    }
 
     /****
      * 简单的日志记录，并保存到文件
@@ -37,12 +79,12 @@ public class tTool {
             if(tconfig.isLog)
             {
                 String path = getLocatePath();
-                osw = new OutputStreamWriter(new FileOutputStream(path + "\\log.log", true));
+                osw = new OutputStreamWriter(new FileOutputStream(path + "/log.log", true));
                 osw.write(str);
             }
         }catch (Exception ex)
         {
-            System.out.print("日志记录出现错误：" + ex.getMessage());
+            System.out.println("日志记录出现错误：" + ex.getMessage());
         }finally {
             try{
                 if(osw != null)
@@ -66,6 +108,14 @@ public class tTool {
         return file.getCanonicalPath();
     }
 
+    public static String[] getIPAndPORT(SocketChannel sc)
+            throws IOException
+    {
+        if(sc == null || !sc.isOpen())
+            return null;
+        return sc.getRemoteAddress().toString().split(":");
+    }
+
     /***
      * 判断IP是否允许连接
      * @param ip
@@ -75,11 +125,12 @@ public class tTool {
     {
         if(tconfig.allow_ips.size() == 0)
             return true;
-        for(String str : tconfig.allow_ips)
-        {
-            if(str.trim().equals(ip.trim()))
-                return true;
-        }
-        return false;
+        return tconfig.allow_ips.contains(ip.trim());
+//        for(String str : tconfig.allow_ips)
+//        {
+//            if(str.trim().equals(ip.trim()))
+//                return true;
+//        }
+        //return false;
     }
 }
